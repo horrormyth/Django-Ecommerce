@@ -9,10 +9,11 @@ from .models import Product
 class ProductDetailView(DetailView):
     model = Product
 
+
 def product_detail_view_function(request, id):
-    product_instance = Product.objects.get(id=id)
+    product_instance = Product.objects.get(id = id)
     template = 'products/product_detail.html'
     context = {
-        'object' : product_instance
+        'object': product_instance
     }
     return render(request, template, context)
