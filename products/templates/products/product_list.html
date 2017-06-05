@@ -2,6 +2,12 @@
 
 {% block content %}
 
-    {{ object_list }}
+ <table class="table">
+{% for object in object_list %}
+<tr>
+    <td>{{ object }}</td>
+</tr>
+{% endfor %}
+ </table>
 
 {% endblock %}

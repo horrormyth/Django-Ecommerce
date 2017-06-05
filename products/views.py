@@ -12,6 +12,12 @@ class ProductListView(ListView):
     model = Product
 #     default template name it returns is 'appname/<modelname>_list/detail.html
 
+    def get_context_data(self, *args, **kwargs):
+        # overwrite default context to use it further
+        context = super(ProductListView, self).get_context_data(*args, **kwargs)
+
+        return context
+
 
 class ProductDetailView(DetailView):
     model = Product
