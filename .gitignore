@@ -2,3 +2,5 @@ ecommerce2/settings/db_password.py
 
 *.xml
 *.pyc
+db.sqlite3
+.idea
