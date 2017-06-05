@@ -5,7 +5,7 @@
  <table class="table">
 {% for object in object_list %}
 <tr>
-    <td><a href='{% url "product_detail" pk=object.pk %}'>{{ object.title }}</a></td>
+    <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
 </tr>
 {% endfor %}
 </table>
