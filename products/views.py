@@ -1,5 +1,6 @@
 from django.views.generic.detail import DetailView
-from django.shortcuts import render
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 
@@ -11,7 +12,16 @@ class ProductDetailView(DetailView):
 
 
 def product_detail_view_function(request, id):
-    product_instance = Product.objects.get(id = id)
+    # product_instance = Product.objects.get(id = id)
+    product_instance = get_object_or_404(Product, id = id)
+
+    try:
+        product_instance = Product.objects.get(id=id)
+    except Product.DoesNotExist:
+        raise Http404
+    except:
+        raise Http404
+
     template = 'products/product_detail.html'
     context = {
         'object': product_instance
