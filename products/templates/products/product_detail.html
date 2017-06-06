@@ -3,5 +3,10 @@
 {%  block content %}
 
 {{ object.title }}
+<select class="form-control">
+{% for product_variation_obj in object.variation_set.all %}
+<option value="{{ product_variation_obj.id }}">{{ product_variation_obj }}</option>
+{% endfor %}
 
+</select>
 {% endblock %}
