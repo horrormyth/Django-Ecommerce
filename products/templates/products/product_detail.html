@@ -3,10 +3,14 @@
 {%  block content %}
 
 {{ object.title }}
+{% if object.variation_set.count > 1 %}
 <select class="form-control">
 {% for product_variation_obj in object.variation_set.all %}
 <option value="{{ product_variation_obj.id }}">{{ product_variation_obj }}</option>
 {% endfor %}
 
 </select>
+{% endif %}
+</br>
+<a href="#">Add to Cart</a>
 {% endblock %}
