@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
 {%  block content %}
-
-{{ object.title }}
+<div class="row">
+<div class="col-sm-8">
+<h2>{{ object.title }}</h2>
+<p class="lead">
+    {{ object.description }}
+</p>
+</div>
+<!-- Product Sidebar -->
+<div class="col-sm-4">
+<h3> {{ object.price }}</h3>
 {% if object.variation_set.count > 1 %}
 <select class="form-control">
 {% for product_variation_obj in object.variation_set.all %}
@@ -11,6 +19,13 @@
 
 </select>
 {% endif %}
-</br>
+<br/>
 <a href="#">Add to Cart</a>
+<br/>
+<hr/>
+<h4>Related Products</h4>
+</div>
+<!-- End Product Sidebar -->
+
+</div>
 {% endblock %}
