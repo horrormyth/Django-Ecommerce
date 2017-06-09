@@ -28,9 +28,16 @@ class ProductListView(ListView):
         if query:
             qs = self.model.objects.filter(
                 Q(title__icontains=query) |
-                Q(description__icontains=query) |
-                Q(price__icontains=query)
+                Q(description__icontains=query)
             )
+            # Fall back search implementation with price
+            try:
+                qs2 = self.model.objects.filter(
+                    Q(price=query)
+                )
+                qs = (qs | qs2).distinct()
+            except:
+                pass
         return qs
 
 
