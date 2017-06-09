@@ -12,6 +12,7 @@ from .models import Product
 
 class ProductListView(ListView):
     model = Product
+    queryset = Product.objects.all()
 #     default template name it returns is 'appname/<modelname>_list/detail.html
 
     def get_context_data(self, *args, **kwargs):
