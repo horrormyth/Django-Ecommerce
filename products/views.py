@@ -31,13 +31,18 @@ class VariationListView(ListView):
             queryset = Variation.objects.filter(product=product)
         return queryset
 
-    # Handle inventory uppdate form and post
+    # Handle inventory update form and post
     def post(self, request, *args, **kwargs):
         formset = VariationInventoryFormSet(request.POST, request.FILES)
         if formset.is_valid():
             formset.save(commit = False)
+            # Handle new item addition as well
             for form in formset:
-                form.save()
+                new_item = form.save(commit = False)
+                product_pk = self.kwargs.get('pk')
+                product = get_object_or_404(Product, pk=product_pk)
+                new_item.product = product
+                new_item.save()
             messages.success(request, 'Your inventory and pricing has been updated')
             return redirect('products')
 

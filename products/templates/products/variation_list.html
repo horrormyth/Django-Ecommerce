@@ -6,6 +6,7 @@
 {% for object in object_list %}
 <tr>
     <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
+    <td>{{ object.inventory }}</td>
 </tr>
 {% endfor %}
 </table>
@@ -15,6 +16,7 @@
     {{ form.instance.product.title }}:
     {{ form.instance.title }}
     {{ form.as_p }}
+<hr>
 {% endfor %}
 
 <input type="submit", value="Update", class="btn" />
