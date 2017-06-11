@@ -4,12 +4,12 @@ from django.utils.decorators import method_decorator
 
 from django.http import Http404
 
-
+# send to login required vie instead of django admin
 class StaffRequiredMixin(object):
     @classmethod
     def as_view(self, *args, **kwargs):
         view = super(StaffRequiredMixin, self).as_view(*args, **kwargs)
-        return staff_member_required(view)
+        return login_required(view)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
