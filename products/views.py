@@ -4,7 +4,6 @@ from django.db.models import Q
 from django.http import Http404
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
@@ -40,10 +39,11 @@ class VariationListView(LoginRequiredMixin, ListView):
             # Handle new item addition as well
             for form in formset:
                 new_item = form.save(commit = False)
-                product_pk = self.kwargs.get('pk')
-                product = get_object_or_404(Product, pk=product_pk)
-                new_item.product = product
-                new_item.save()
+                if new_item.title:
+                    product_pk = self.kwargs.get('pk')
+                    product = get_object_or_404(Product, pk=product_pk)
+                    new_item.product = product
+                    new_item.save()
             messages.success(request, 'Your inventory and pricing has been updated')
             return redirect('products')
 
