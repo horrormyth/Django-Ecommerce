@@ -39,11 +39,11 @@ class VariationListView(LoginRequiredMixin, ListView):
             # Handle new item addition as well
             for form in formset:
                 new_item = form.save(commit = False)
-                if new_item.title:
-                    product_pk = self.kwargs.get('pk')
-                    product = get_object_or_404(Product, pk=product_pk)
-                    new_item.product = product
-                    new_item.save()
+                # if new_item.title:
+                product_pk = self.kwargs.get('pk')
+                product = get_object_or_404(Product, pk=product_pk)
+                new_item.product = product
+                new_item.save()
             messages.success(request, 'Your inventory and pricing has been updated')
             return redirect('products')
 
