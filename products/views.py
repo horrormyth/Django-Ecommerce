@@ -9,11 +9,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from .forms import VariationInventoryFormSet
+from .mixins import LoginRequiredMixin
 from .models import Product, Variation
 
 
 # Editing for admin
-class VariationListView(ListView):
+class VariationListView(LoginRequiredMixin, ListView):
     model = Variation
     queryset = Variation.objects.all()
 
