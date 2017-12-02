@@ -24,9 +24,8 @@ class Product(models.Model):
     description = models.TextField(blank = True, null = True)
     price = models.DecimalField(decimal_places = 2, max_digits = 20)
     active = models.BooleanField(default = True)
-    # slug
-    # inventory?
-
+    categories = models.ManyToManyField('Category', blank=True)
+    default = models.ForeignKey('Category', related_name='default_category', null=True, blank=True)
     objects = ProductManager()
 
     def __unicode__(self):  # def __str__(self):
@@ -87,3 +86,13 @@ class ProductImage(models.Model):
         return self.product.title
 
 # Product Category
+
+class Category(models.Model):
+    title = models.CharField(max_length=120)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(null=True, blank=True)
+    active = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+    def __unicode__(self):
+        return self.title
