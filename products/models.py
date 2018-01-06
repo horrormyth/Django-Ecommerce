@@ -8,22 +8,22 @@ from django.utils.text import slugify
 
 class ProductQuerySet(models.query.QuerySet):
     def active(self):
-        return self.filter(active = True)
+        return self.filter(active=True)
 
 
 class ProductManager(models.Manager):
     def get_queryset(self):
-        return ProductQuerySet(self.model, using = self._db)
+        return ProductQuerySet(self.model, using=self._db)
 
     def all(self, *args, **kwargs):
         return self.get_queryset().active()
 
 
 class Product(models.Model):
-    title = models.CharField(max_length = 120)
-    description = models.TextField(blank = True, null = True)
-    price = models.DecimalField(decimal_places = 2, max_digits = 20)
-    active = models.BooleanField(default = True)
+    title = models.CharField(max_length=120)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(decimal_places=2, max_digits=20)
+    active = models.BooleanField(default=True)
     categories = models.ManyToManyField('Category', blank=True)
     default = models.ForeignKey('Category', related_name='default_category', null=True, blank=True)
     objects = ProductManager()
@@ -32,16 +32,16 @@ class Product(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("product_detail", kwargs = {"pk": self.pk})
+        return reverse("product_detail", kwargs={"pk": self.pk})
 
 
 class Variation(models.Model):
     product = models.ForeignKey(Product)
-    title = models.CharField(max_length = 120)
-    price = models.DecimalField(decimal_places = 2, max_digits = 20)
-    sale_price = models.DecimalField(decimal_places = 2, max_digits = 20, null = True, blank = True)
-    active = models.BooleanField(default = True)
-    inventory = models.IntegerField(null = True, blank = True)  # refer none == unlimited amount
+    title = models.CharField(max_length=120)
+    price = models.DecimalField(decimal_places=2, max_digits=20)
+    sale_price = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
+    active = models.BooleanField(default=True)
+    inventory = models.IntegerField(null=True, blank=True)  # refer none == unlimited amount
 
     def __unicode__(self):
         return self.title
@@ -67,7 +67,7 @@ def product_post_saved_receiver(sender, instance, created, *args, **kwargs):
         new_var.save()
 
 
-post_save.connect(product_post_saved_receiver, sender = Product)
+post_save.connect(product_post_saved_receiver, sender=Product)
 
 
 def image_upload_to(instance, filename):
@@ -80,10 +80,11 @@ def image_upload_to(instance, filename):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product)
-    image = models.ImageField(upload_to = image_upload_to)
+    image = models.ImageField(upload_to=image_upload_to)
 
     def __unicode__(self):
         return self.product.title
+
 
 # Product Category
 
