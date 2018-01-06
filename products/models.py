@@ -18,6 +18,13 @@ class ProductManager(models.Manager):
     def all(self, *args, **kwargs):
         return self.get_queryset().active()
 
+    def get_related(self, instance):
+        """ Get the related products """
+        products_one = self.get_queryset().filter(categories__in=instance.categories.all())
+        products_two = self.get_queryset().filter(default=instance.default)
+        qs = (products_one | products_two).exclude(id=instance.id).distinct()  # remove the current one with exclude
+        return qs
+
 
 class Product(models.Model):
     title = models.CharField(max_length=120)
@@ -27,6 +34,9 @@ class Product(models.Model):
     categories = models.ManyToManyField('Category', blank=True)
     default = models.ForeignKey('Category', related_name='default_category', null=True, blank=True)
     objects = ProductManager()
+
+    class Meta:
+        ordering = ['-title']
 
     def __unicode__(self):  # def __str__(self):
         return self.title
