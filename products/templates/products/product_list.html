@@ -2,12 +2,12 @@
 
 {% block content %}
 
- <table class="table">
-{% for object in object_list %}
-<tr>
-    <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
-</tr>
-{% endfor %}
-</table>
+    <table class="table">
+        {% for object in object_list %}
+            <tr>
+                <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}

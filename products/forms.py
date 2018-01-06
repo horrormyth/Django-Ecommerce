@@ -1,9 +1,10 @@
 from django import forms
-from .models import Variation
-
 from django.forms.models import modelformset_factory
 
+from .models import Variation
+
 """Form for editing inventory"""
+
 
 class VariationInventoryForm(forms.ModelForm):
     class Meta:
@@ -16,4 +17,5 @@ class VariationInventoryForm(forms.ModelForm):
             'active'
         ]
 
-VariationInventoryFormSet = modelformset_factory(Variation, form = VariationInventoryForm, extra = 0)
+
+VariationInventoryFormSet = modelformset_factory(Variation, form=VariationInventoryForm, extra=0)

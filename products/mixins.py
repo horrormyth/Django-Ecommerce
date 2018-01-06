@@ -1,8 +1,7 @@
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.utils.decorators import method_decorator
 
-from django.http import Http404
 
 # send to login required vie instead of django admin
 class StaffRequiredMixin(object):
@@ -17,6 +16,7 @@ class StaffRequiredMixin(object):
             return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
         else:
             raise Http404
+
 
 class LoginRequiredMixin(object):
     @classmethod
