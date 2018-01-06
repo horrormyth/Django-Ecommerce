@@ -1,15 +1,20 @@
 from django.contrib import messages
 from django.db.models import Q
-
 from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from .forms import VariationInventoryFormSet
 from .mixins import LoginRequiredMixin
-from .models import Product, Variation
+from .models import Product, Variation, Category
+
+
+class CategoryListView(ListView):
+    model = Category
+    queryset = Category.objects.all()
+    template_name = 'products/product_list.html'
 
 
 # Editing for admin
@@ -19,7 +24,7 @@ class VariationListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(VariationListView, self).get_context_data(*args, **kwargs)
-        context['formset'] = VariationInventoryFormSet(queryset = self.get_queryset())
+        context['formset'] = VariationInventoryFormSet(queryset=self.get_queryset())
 
         return context
 
@@ -35,10 +40,10 @@ class VariationListView(LoginRequiredMixin, ListView):
     def post(self, request, *args, **kwargs):
         formset = VariationInventoryFormSet(request.POST, request.FILES)
         if formset.is_valid():
-            formset.save(commit = False)
+            formset.save(commit=False)
             # Handle new item addition as well
             for form in formset:
-                new_item = form.save(commit = False)
+                new_item = form.save(commit=False)
                 # if new_item.title:
                 product_pk = self.kwargs.get('pk')
                 product = get_object_or_404(Product, pk=product_pk)
@@ -48,8 +53,6 @@ class VariationListView(LoginRequiredMixin, ListView):
             return redirect('products')
 
         raise Http404
-
-
 
 
 class ProductListView(ListView):
@@ -84,21 +87,3 @@ class ProductListView(ListView):
 
 class ProductDetailView(DetailView):
     model = Product
-
-
-# def product_detail_view_function(request, id):
-#     # product_instance = Product.objects.get(id = id)
-#     product_instance = get_object_or_404(Product, id = id)
-#
-#     try:
-#         product_instance = Product.objects.get(id=id)
-#     except Product.DoesNotExist:
-#         raise Http404
-#     except:
-#         raise Http404
-#
-#     template = 'products/product_detail.html'
-#     context = {
-#         'object': product_instance
-#     }
-#     return render(request, template, context)
