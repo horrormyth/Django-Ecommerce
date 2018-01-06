@@ -17,6 +17,20 @@ class CategoryListView(ListView):
     template_name = 'products/product_list.html'
 
 
+class CategoryDetailView(DetailView):
+    model = Category
+
+    def get_context_data(self, *args, **kwargs):
+        """ Updating queryset because of the default category  and the list of category"""
+        context = super(CategoryDetailView, self).get_context_data(*args, **kwargs)
+        obj = self.get_object()
+        product_set = obj.product_set.all()
+        default_products = obj.default_category.all()
+        products = (product_set | default_products).distinct()
+        context['products'] = products
+        return context
+
+
 # Editing for admin
 class VariationListView(LoginRequiredMixin, ListView):
     model = Variation
