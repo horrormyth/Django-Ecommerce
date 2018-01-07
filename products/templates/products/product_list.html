@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h1>All Products<small><a href="{% url 'categories' %}"> Categories</a> </small></h1>
     <div class="row">
-        {% for product in product_list %}
+        {% for product in object_list %}
             <div class="col-xs-4">
                 <div class="thumbnail text-center">
                     <h4><a href='{{ product.get_absolute_url }}'>{{ product.title }}</a></h4>
