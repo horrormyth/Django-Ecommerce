@@ -44,6 +44,13 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"pk": self.pk})
 
+    def get_image_url(self):
+        img = self.productimage_set.first()
+        if img:
+            return img.image.url
+        return img
+
+
 
 class Variation(models.Model):
     product = models.ForeignKey(Product)
