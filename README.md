@@ -1,8 +1,8 @@
 # E-Commerce Application
 A simple django based e-commerce application with payment integration (Beta)
-##Includes
-    1. Ecommerce app (-- In progress )
-    2. Rest api
+## Includes
+1. Ecommerce app (-- In progress )
+2. Rest api
 ## Instruction
 - Clone the application
 - Create virtualenv 
