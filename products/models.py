@@ -140,6 +140,7 @@ class FeaturedProduct(models.Model):
     title = models.CharField(max_length=120, null=True, blank=True)
     text = models.CharField(max_length=220, null=True, blank=True)
     text_right = models.BooleanField(default=False)
+    text_css_color = models.CharField(max_length=6, null=True, blank=True)
     show_price = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     make_image_background = models.BooleanField(default=False)
