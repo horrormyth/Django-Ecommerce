@@ -23,24 +23,26 @@
      
 {% block jumbotron %}
  {% if not request.user.is_authenticated %}
+     {% if featured_image %}
+         <div class="jumbotron">
+             <div class="container">
+                 <div class="row">
+                     <div class='col-sm-6'>
+                         <h1>{{ featured_image.product.title }}</h1>
+                         <p>{{ featured_image.product.description }}</p>
+                         <p>
+                             <a class="btn btn-lg btn-primary" href="{{ featured_image.product.get_absolute_url }}" role="button">More Details</a>
+                         </p>
+                     </div>
+                     <div class='col-sm-6'>
+                         <img src="{{ featured_image.image.url }}" class="img-responsive">
 
-<div class="jumbotron">
- <div class="container">
-	<div class="row">
-		<div class='col-sm-6'>
-		<h1>Try Django 1.8</h1>
-		<p>The MVP Landing project is designed to get your project started. The goal is to help you launch as soon as possible with the least amount of investment using time or money. Join Us today.</p>
-		<p>
-		<a class="btn btn-lg btn-primary" href="" role="button">Join Us &raquo;</a>
-		</p>
-		</div>
-		<div class='col-sm-6' >
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/2uLYO1LUf6Q" frameborder="0" allowfullscreen></iframe>
-
- 		</div>
-		</div>
-	</div>
- </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     {% else %}
+     {% endif %}
  {% endif %}
 {% endblock %}
 
@@ -68,6 +70,7 @@
 <div class="row">
 
   <div class="col-sm-3 pull-right">
+
   	
 			<p class='lead text-align-center'>{{ title }}</p>
 
