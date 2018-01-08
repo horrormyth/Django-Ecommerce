@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     #third party apps
     'crispy_forms',
     'registration',
+    'debug_toolbar',
     #my apps
     'newsletter',
     'products',
