@@ -142,6 +142,7 @@ class FeaturedProduct(models.Model):
     text_right = models.BooleanField(default=False)
     show_price = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
+    make_image_background = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.product.title
