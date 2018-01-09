@@ -2,12 +2,5 @@
 
 {% block content %}
     <h1>All Products<small><a href="{% url 'categories' %}"> Categories</a> </small></h1>
-    <div class="row">
-        {% for product in object_list %}
-            <div class="col-xs-4">
-                {% include 'products/product_thumnail.html' with product=product  price='True'%}
-            </div>
-            {% cycle '' '' '</div><div class="row">' %}
-        {% endfor %}
-    </div>
+    {% include 'products/products.html' with object_list=object_list %}
 {% endblock %}
