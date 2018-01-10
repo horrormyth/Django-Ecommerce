@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'registration',
     'debug_toolbar',
     #my apps
+    'carts',
     'newsletter',
     'products',
 )
