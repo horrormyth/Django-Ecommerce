@@ -31,34 +31,35 @@
 {% block content %}
     <div class='row'>
 
-        <div class='col-sm-8'>
-            <h2>{{ object.title }}</h2>
+    <div class='col-sm-8'>
+        <h2>{{ object.title }}</h2>
 
-            {% if object.get_image_url %}
-                <div>
-                    <img id='img' class='img-responsive' src='{{ object.get_image_url }}'/>
-                </div>
-            {% endif %}
-            <p class='lead'>
-                {{ object.description }}
-            </p>
-        </div>
+        {% if object.get_image_url %}
+            <div>
+                <img id='img' class='img-responsive' src='{{ object.get_image_url }}'/>
+            </div>
+        {% endif %}
+        <p class='lead'>
+            {{ object.description }}
+        </p>
+    </div>
 
 
-        <!-- Product Sidebar -->
-        <div class='col-sm-4'>
-
-            {#<h3 id='price'>{{ object.price }}</h3>#}
+    <!-- Product Sidebar -->
+    <div class='col-sm-4'>
+        <form method="GET" action="{% url 'cart' %}">
             {% if object.variation_set.count > 1 %}
                 <h3 id='price'>{{ object.variation_set.first.price }}</h3>
-                <select class='form-control variation_select'>
+                <select name="item" class='form-control variation_select'>
                     {% for vari_obj in object.variation_set.all %}
                         <!-- <option data-img="http://www.spirit1059.com/pics/Feeds/Articles/2015611/118317/Beach.jpg" data-price="{{ vari_obj.price }}" value="{{ vari_obj.id }}">{{ vari_obj }}</option> -->
-                        <option data-sale-price="{{ vari_obj.sale_price }}" data-price="{{ vari_obj.price }}"
+                        <option data-sale-price="{{ vari_obj.sale_price }}"
+                                data-price="{{ vari_obj.price }}"
                                 value="{{ vari_obj.id }}">{{ vari_obj }}</option>
                     {% endfor %}
                 </select>
             {% else %}
+                <input type="hidden" , name="item" value="{{ object.variation_set.first.id }}"/>
                 <h3 id='price'>{% if object.variation_set.first.sale_price %}
                     {{ object.variation_set.first.sale_price }}
                     <small class="og-price"> {{ object.variation_set.first.price }}</small>
@@ -67,32 +68,34 @@
                 {% endif %}
                 </h3>
             {% endif %}
+        <br/>
+        <input class="form-control" type="number" name="quantity" value="1">
             <br/>
-            <a href="#">Add to Cart</a>
+            <input type="submit" value="Add to cart" class="btn btn-default" href="{% url 'cart' %}">
+        </form>
 
+        <br/>
+        <hr/>
+        <p>
+            Share<br/>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+                <i class="fa fa-facebook-square fa-3x"></i></a>
 
-            <br/>
-            <hr/>
-            <p>
-                Share<br/>
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
-                    <i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="#">
+                <i class="fa fa-twitter-square fa-3x"></i></a>
+        </p>
 
-                <a href="#">
-                    <i class="fa fa-twitter-square fa-3x"></i></a>
-            </p>
-
-            <hr/>
-            <h4>Related Products</h4>
-            {# Product thumnails stazrt  #}
-            <div class="row">
-                {% for product in related %}
-                    <div class="col-xs-6">
-                        {% include 'products/product_thumnail.html' with product=product price='True'%}
-                    </div>
-                    {% cycle '' '</div><div class="row">' %}
-                {% endfor %}
-            </div>
+        <hr/>
+        <h4>Related Products</h4>
+        {# Product thumnails stazrt  #}
+        <div class="row">
+            {% for product in related %}
+                <div class="col-xs-6">
+                    {% include 'products/product_thumnail.html' with product=product price='True' %}
+                </div>
+                {% cycle '' '</div><div class="row">' %}
+            {% endfor %}
+        </div>
 
         <!-- End Product Sidebar -->
 

@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
@@ -33,6 +34,13 @@ class CartView(SingleObjectMixin, View):
         if item_id:
             item = get_object_or_404(Variation, id=item_id)
             quantity = request.GET.get('quantity', 1)
+
+            try:
+                if int(quantity) < 1:
+                    delete = True
+            except:  # Not very good exception catcher (this does not refelect which exception is being caught)
+                raise Http404
+
             cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
             if delete:
                 cart_item.delete()
