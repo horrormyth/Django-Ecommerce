@@ -8,7 +8,7 @@ A simple django based e-commerce application with payment integration (Beta)
 - Create virtualenv 
     - `virtualenv env`
 - Activate the virtualenv
-    - `source env/bin/activat`
+    - `source env/bin/activate`
 - Install requirements in the created virtualenv
     - `pip install -r requirements.txt`
 - Migrate (makemigrations if any tables are missed (create tables))
