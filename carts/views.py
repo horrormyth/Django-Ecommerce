@@ -1,13 +1,12 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
-# Create your views here.
+
 from carts.models import CartItem, Cart
 from products.models import Variation
 
 
 class CartView(View):
-
     def get(self, request, *args, **kwargs):
         request.session.set_expiry(0)  # until the browser closes
         cart_id = request.session.get('cart_id', None)
