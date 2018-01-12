@@ -18,7 +18,7 @@
                     <td><input type="number" class="item-quantity" name="quantity" value="{{ cart_item.quantity }}"/>
                         <input type="submit" class="btn btn-info btn-update" value="Update Item" style="display: none;">
                     </td>
-                    <td>{{ cart_item.line_item_total}}</td>
+                    <td>{{ cart_item.line_item_total }}</td>
                     <td class="text-right"><a href="{{ cart_item.remove }}" title="Remove Item"><i
                             class="fa fa-remove delete-item"></i></a>
 
@@ -26,8 +26,8 @@
             </form>
             </tr>
         {% endfor %}
-    <tr>
-        <td colspan="4" class="text-right">Subtotal: {{ object.subtotal }}</td>
-    </tr>
+        <tr>
+            <td colspan="4" class="text-right">Subtotal: {{ object.subtotal }}</td>
+        </tr>
     </table>
 {% endblock %}
