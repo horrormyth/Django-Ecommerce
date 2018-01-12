@@ -2,8 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
-# Create your models here.
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 from products.models import Variation
@@ -22,8 +21,28 @@ class CartItem(models.Model):
         return self.item.remove_from_cart()
 
 
+class Cart(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+    items = models.ManyToManyField(Variation, through=CartItem)
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    subtotal = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def __unicode__(self):
+        return str(self.id)
+
+    def update_subtotal(self):
+        subtotal = 0
+        for item in self.items.all():
+            subtotal += item.line_item_total
+
+        self.subtotal = subtotal
+        self.save()
+
+
 @receiver(pre_save, sender=CartItem)
 def cart_item_pre_save_receiver(sender, instance, *args, **kwargs):
+    """ Pre-save the line item total after calculating the amount and the price """
     quantity = instance.quantity
     if quantity >= 1:
         price = instance.item.get_price()
@@ -31,11 +50,7 @@ def cart_item_pre_save_receiver(sender, instance, *args, **kwargs):
         instance.line_item_total = line_item_total
 
 
-class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
-    items = models.ManyToManyField(Variation, through=CartItem)
-    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
-    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
-
-    def __unicode__(self):
-        return str(self.id)
+@receiver(post_save, sender=CartItem)
+def cart_item_post_save_receiver(sender, instance, *args, **kwargs):
+    """Save the subtotal to Cart after calcualting the total of each items in the """
+    instance.cart.update_subtotal()
