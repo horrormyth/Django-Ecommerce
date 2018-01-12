@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
+
 {% block content %}
     <table class="table">
         {% for cart_item in object.cartitem_set.all %}
-            <tr>
-                <td>{{ cart_item.item.get_title }}</td>
-                <td>{{ cart_item.quantity }}</td>
-                <td> {{ cart_item.line_total }}</td>
-                <td class="text-right"><a href="{{ cart_item.remove }}">Remove</a></td>
-            </tr>
+            <form action="." method="GET">
+                <tr>
+                    <td>{{ cart_item.item.get_title }}</td>
+                    <input type="hidden" name="cart_item" value="{{ cart_item.item.id  }}"/>
+                    <td><input type="number" class="item-quantity" name="quantity" value="{{ cart_item.quantity }}"/>
+                    <input type="submit" class="btn btn-info btn-update" value="Update Item" >
+                    </td>
+                    <td>{{ cart_item.line_total }}</td>
+                <td class="text-right"><a href="{{ cart_item.remove }}" title="Remove Item"><i class="fa fa-remove delete-item"></i></a>
+
+                    </td>
+                </tr>
+            </form>
         {% endfor %}
     </table>
 {% endblock %}

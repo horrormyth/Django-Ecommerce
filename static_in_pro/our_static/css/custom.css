@@ -11,3 +11,10 @@
 	vertical-align: middle;
 }
 
+.delete-item {
+	color: red;
+    font-size: 25px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
