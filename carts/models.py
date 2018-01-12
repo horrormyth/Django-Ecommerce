@@ -33,7 +33,7 @@ class Cart(models.Model):
 
     def update_subtotal(self):
         subtotal = 0
-        for item in self.items.all():
+        for item in self.cartitem_set.all():
             subtotal += item.line_item_total
 
         self.subtotal = subtotal
