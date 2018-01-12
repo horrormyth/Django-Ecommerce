@@ -8,7 +8,6 @@
     {% endblock %}
 </script>
 
-
 {% block content %}
     <table class="table">
         {% for cart_item in object.cartitem_set.all %}
@@ -19,7 +18,7 @@
                     <td><input type="number" class="item-quantity" name="quantity" value="{{ cart_item.quantity }}"/>
                         <input type="submit" class="btn btn-info btn-update" value="Update Item" style="display: none;">
                     </td>
-                    <td>{{ cart_item.line_total }}</td>
+                    <td>{{ cart_item.line_item_total}}</td>
                     <td class="text-right"><a href="{{ cart_item.remove }}" title="Remove Item"><i
                             class="fa fa-remove delete-item"></i></a>
 

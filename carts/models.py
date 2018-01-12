@@ -1,7 +1,11 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
-
 # Create your models here.
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
 from products.models import Variation
 
 
@@ -9,12 +13,22 @@ class CartItem(models.Model):
     cart = models.ForeignKey("Cart")
     item = models.ForeignKey(Variation)
     quantity = models.PositiveIntegerField(default=1)
+    line_item_total = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __unicode__(self):
         return self.item.title
 
     def remove(self):
         return self.item.remove_from_cart()
+
+
+@receiver(pre_save, sender=CartItem)
+def cart_item_pre_save_receiver(sender, instance, *args, **kwargs):
+    quantity = instance.quantity
+    if quantity >= 1:
+        price = instance.item.get_price()
+        line_item_total = Decimal(quantity) * Decimal(price)
+        instance.line_item_total = line_item_total
 
 
 class Cart(models.Model):
