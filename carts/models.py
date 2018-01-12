@@ -13,6 +13,9 @@ class CartItem(models.Model):
     def __unicode__(self):
         return self.item.title
 
+    def remove(self):
+        return self.item.remove_from_cart()
+
 
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
