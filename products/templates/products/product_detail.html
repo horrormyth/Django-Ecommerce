@@ -34,7 +34,7 @@
                 url: '{% url 'cart' %}',
                 data: formData,
                 success: function (data) {
-                    showFlashMessage('Product added')
+                    showFlashMessage(checkItemStatus(data))
                 },
                 error: function (response, error) {
                     $('#add-form').submit()

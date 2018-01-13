@@ -17,15 +17,20 @@
                 url: '{% url 'cart' %}',
                 data: data,
                 success: function (data) {
+                    var flash_message ='Item succesfully Updated'
                     if (data.item_deleted) {
                         $('#item-' + item).fadeOut()
+                        flash_message = 'Item successfully deleted !!'
                     }
                     else {
+                        if (data.item_added){
+                            flash_message = 'Item successfully added !!'
+                        }
                         $('#item-line-total-' + item).text(data.line_item_total)
                         $('#subtotal').text(data.subtotal)
                     }
 
-                    showFlashMessage('Cart updated')
+                    showFlashMessage(flash_message)
                 },
                 error: function (response, error) {
                     $('#add-form').submit()
