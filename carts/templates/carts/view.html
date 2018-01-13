@@ -19,6 +19,7 @@
                 success: function (data) {
                     var flash_message ='Item succesfully Updated'
                     if (data.item_deleted) {
+                        $('#subtotal').text('Subtotal : '+ data.subtotal)
                         $('#item-' + item).fadeOut()
                         flash_message = 'Item successfully deleted !!'
                     }
@@ -27,7 +28,7 @@
                             flash_message = 'Item successfully added !!'
                         }
                         $('#item-line-total-' + item).text(data.line_item_total)
-                        $('#subtotal').text(data.subtotal)
+                        $('#subtotal').text('Subtotal : '+ data.subtotal)
                     }
 
                     showFlashMessage(flash_message)

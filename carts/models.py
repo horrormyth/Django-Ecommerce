@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 
 from products.models import Variation
@@ -50,7 +50,10 @@ def cart_item_pre_save_receiver(sender, instance, *args, **kwargs):
         instance.line_item_total = line_item_total
 
 
+@receiver(post_delete, sender=CartItem)
 @receiver(post_save, sender=CartItem)
 def cart_item_post_save_receiver(sender, instance, *args, **kwargs):
     """Save the subtotal to Cart after calcualting the total of each items in the """
     instance.cart.update_subtotal()
+
+
