@@ -54,12 +54,22 @@ class CartView(SingleObjectMixin, View):
 
         if request.is_ajax():
             # Assuming if not deleted and not added that should reflect it is updated.
-            return JsonResponse(
-                {
-                    'item_deleted': delete,
-                    'item_added': item_added
-                }
-            )
+            try:
+                line_item_total = cart_item.line_item_total
+            except AttributeError:
+                line_item_total = None
+
+            try:
+                subtotal = cart_item.cart.subtotal
+            except AttributeError:
+                subtotal = None
+            data = {
+                'item_deleted': delete,
+                'item_added': item_added,
+                'line_item_total': line_item_total,
+                'subtotal': subtotal
+            }
+            return JsonResponse(data=data)
 
         context = {
             'object': cart

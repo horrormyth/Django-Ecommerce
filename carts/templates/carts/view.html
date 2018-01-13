@@ -3,15 +3,40 @@
 <script>
     {% block jquery %}
         $(".item-quantity").change(function () {
-            $(this).next(".btn-update").show();
-        });
+            {#            $(this).next(".btn-update").show();#}
+            {#             event.preventDefault();#}
+            var item = $(this).prev("input[type='hidden']").val();
+            var quantity = $(this).val()
+            var data = {
+                item: item,
+                quantity: quantity
+            }
+            console.log(data)
+            $.ajax({
+                type: 'GET',
+                url: '{% url 'cart' %}',
+                data: data,
+                success: function (data) {
+                    if (data.item_deleted) {
+                        $('#item-' + item).fadeOut()
+                    }
+                    else {
+                        $('#item-line-total-' + item).text(data.line_item_total)
+                        $('#subtotal').text(data.subtotal)
+                    }
+                },
+                error: function (response, error) {
+                    $('#add-form').submit()
+                }
+            })
+        })
     {% endblock %}
 </script>
 
 {% block content %}
     <table class="table">
         {% for cart_item in object.cartitem_set.all %}
-            <tr>
+            <tr id="item-{{ cart_item.item.id }}">
                 <td>{{ cart_item.item.get_title }}</td>
                 <td>
                     <form action="." method="GET">
@@ -20,7 +45,7 @@
                         <input type="submit" class="btn btn-info btn-update" value="Update Item" style="display: none;">
                     </form>
                 </td>
-                <td>{{ cart_item.line_item_total }}</td>
+                <td id="item-line-total-{{ cart_item.item.id }}">{{ cart_item.line_item_total }}</td>
                 <td class="text-right"><a href="{{ cart_item.remove }}" title="Remove Item"><i
                         class="fa fa-remove delete-item"></i></a>
 
@@ -28,7 +53,7 @@
             </tr>
         {% endfor %}
         <tr>
-            <td colspan="4" class="text-right">Subtotal: {{ object.subtotal }}</td>
+            <td id="subtotal" colspan="4" class="text-right">Subtotal: {{ object.subtotal }}</td>
         </tr>
     </table>
 {% endblock %}
