@@ -3,34 +3,36 @@
 <script>
     {% block jquery %}
         $(".item-quantity").change(function () {
-            {#            $(this).next(".btn-update").show();#}
-            {#             event.preventDefault();#}
             var item = $(this).prev("input[type='hidden']").val();
             var quantity = $(this).val()
             var data = {
                 item: item,
                 quantity: quantity
             }
-            console.log(data)
             $.ajax({
                 type: 'GET',
                 url: '{% url 'cart' %}',
                 data: data,
                 success: function (data) {
-                    var flash_message ='Item succesfully Updated'
+                    var flash_message = 'Item succesfully Updated';
                     if (data.item_deleted) {
-                        $('#subtotal').text('Subtotal : '+ data.subtotal)
-                        $('#item-' + item).fadeOut()
+                        $('#subtotal').text('Subtotal : ' + data.subtotal);
+                        $('#item-' + item).fadeOut();
                         flash_message = 'Item successfully deleted !!'
                     }
                     else {
-                        if (data.item_added){
+                        if (data.item_added) {
                             flash_message = 'Item successfully added !!'
                         }
-                        $('#item-line-total-' + item).text(data.line_item_total)
-                        $('#subtotal').text('Subtotal : '+ data.subtotal)
+                        $('#item-line-total-' + item).text(data.line_item_total);
+                        $('#subtotal').text('Subtotal : ' + data.subtotal);
                     }
+                    if (data.total_items === 0) {
+                        $(".table").fadeOut();
+                        var empyt_cart_template = "{% include 'carts/empty_cart.html' %}";
+                        $('.main-content').html(empyt_cart_template)
 
+                    }
                     showFlashMessage(flash_message)
                 },
                 error: function (response, error) {
@@ -38,30 +40,38 @@
                 }
             })
         })
+
     {% endblock %}
 </script>
-
 {% block content %}
-    <table class="table">
-        {% for cart_item in object.cartitem_set.all %}
-            <tr id="item-{{ cart_item.item.id }}">
-                <td>{{ cart_item.item.get_title }}</td>
-                <td>
-                    <form action="." method="GET">
-                        <input type="hidden" name="item" value="{{ cart_item.item.id }}"/>
-                        <input type="number" class="item-quantity" name="quantity" value="{{ cart_item.quantity }}"/>
-                        <input type="submit" class="btn btn-info btn-update" value="Update Item" style="display: none;">
-                    </form>
-                </td>
-                <td id="item-line-total-{{ cart_item.item.id }}">{{ cart_item.line_item_total }}</td>
-                <td class="text-right"><a href="{{ cart_item.remove }}" title="Remove Item"><i
-                        class="fa fa-remove delete-item"></i></a>
+    <div class="row main-content">
+        {% if object.cartitem_set.all.count < 1 %}
+           {% include 'carts/empty_cart.html' %}
+        {% else %}
+            <table class="table">
+                {% for cart_item in object.cartitem_set.all %}
+                    <tr id="item-{{ cart_item.item.id }}">
+                        <td>{{ cart_item.item.get_title }}</td>
+                        <td>
+                            <form action="." method="GET">
+                                <input type="hidden" name="item" value="{{ cart_item.item.id }}"/>
+                                <input type="number" class="item-quantity" name="quantity"
+                                       value="{{ cart_item.quantity }}"/>
+                                <input type="submit" class="btn btn-info btn-update" value="Update Item"
+                                       style="display: none;">
+                            </form>
+                        </td>
+                        <td id="item-line-total-{{ cart_item.item.id }}">{{ cart_item.line_item_total }}</td>
+                        <td class="text-right"><a href="{{ cart_item.remove }}" title="Remove Item"><i
+                                class="fa fa-remove delete-item"></i></a>
 
-                </td>
-            </tr>
-        {% endfor %}
-        <tr>
-            <td id="subtotal" colspan="4" class="text-right">Subtotal: {{ object.subtotal }}</td>
-        </tr>
-    </table>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td id="subtotal" colspan="4" class="text-right">Subtotal: {{ object.subtotal }}</td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
 {% endblock %}

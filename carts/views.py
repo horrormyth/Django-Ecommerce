@@ -63,11 +63,17 @@ class CartView(SingleObjectMixin, View):
                 subtotal = cart_item.cart.subtotal
             except AttributeError:
                 subtotal = None
+
+            try:
+                total_items = cart_item.cart.items.count()
+            except Exception:
+                total_items = 0
             data = {
                 'item_deleted': delete,
                 'item_added': item_added,
                 'line_item_total': line_item_total,
-                'subtotal': subtotal
+                'subtotal': subtotal,
+                'total_items':total_items
             }
             return JsonResponse(data=data)
 
