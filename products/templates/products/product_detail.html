@@ -34,25 +34,13 @@
                 url: '{% url 'cart' %}',
                 data: formData,
                 success: function (data) {
-                    if (data.item_added) {
-                        $('#ajax-message').text('Item Added')
-                    }
-                    else if (data.item_deleted) {
-                        $('#ajax-message').text('Item Removed')
-                    }
-                    else {
-                        $('#ajax-message').text('Item Updated')
-                    }
+                    showFlashMessage('Product added')
                 },
                 error: function (response, error) {
                     $('#add-form').submit()
                 }
 
             })
-
-
-            {#            fallback #}
-            {#            $('#add-form').submit()#}
         });
 
     {% endblock %}

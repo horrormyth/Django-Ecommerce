@@ -1,20 +1,32 @@
 .text-align-center {
-	text-align: center;
+    text-align: center;
 }
+
 .og-price {
-	color:red;
-	text-decoration:line-through;
+    color: red;
+    text-decoration: line-through;
 }
 
 .fa-navbar-cart {
-	font-size: 18px;
-	vertical-align: middle;
+    font-size: 18px;
+    vertical-align: middle;
 }
 
 .delete-item {
-	color: red;
+    color: red;
     font-size: 25px;
     margin-right: 10px;
     vertical-align: middle;
+}
+
+.container-alert-flash {
+    position: absolute;
+    top: 10px;
+    z-index: 2000;
+    width: 100%;
+    right: 0%;
+    margin: 0px;
+    display: none;
+
 }
 

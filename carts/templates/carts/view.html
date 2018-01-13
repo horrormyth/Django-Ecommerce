@@ -24,6 +24,8 @@
                         $('#item-line-total-' + item).text(data.line_item_total)
                         $('#subtotal').text(data.subtotal)
                     }
+
+                    showFlashMessage('Cart updated')
                 },
                 error: function (response, error) {
                     $('#add-form').submit()
