@@ -24,6 +24,37 @@
 
         })
 
+        {#        AJAX call for adding items in cart#}
+
+        $('#submit-btn').click(function (event) {
+            event.preventDefault();
+            var formData = $('#add-form').serialize();
+            $.ajax({
+                type: 'GET',
+                url: '{% url 'cart' %}',
+                data: formData,
+                success: function (data) {
+                    if (data.item_added) {
+                        $('#ajax-message').text('Item Added')
+                    }
+                    else if (data.item_deleted) {
+                        $('#ajax-message').text('Item Removed')
+                    }
+                    else {
+                        $('#ajax-message').text('Item Updated')
+                    }
+                },
+                error: function (response, error) {
+                    $('#add-form').submit()
+                }
+
+            })
+
+
+            {#            fallback #}
+            {#            $('#add-form').submit()#}
+        });
+
     {% endblock %}
 </script>
 
@@ -47,7 +78,8 @@
 
         <!-- Product Sidebar -->
         <div class='col-sm-4'>
-            <form method="GET" action="{% url 'cart' %}">
+            <form id="add-form" method="GET" action="{% url 'cart' %}">
+                <p id='ajax-message' class="lead"></p>
                 {% if object.variation_set.count > 1 %}
                     <h3 id='price'>{{ object.variation_set.first.price }}</h3>
                     <select name="item" class='form-control variation_select'>
@@ -71,7 +103,8 @@
                 <br/>
                 <input class="form-control" type="number" name="quantity" value="1">
                 <br/>
-                <input type="submit" value="Add to cart" class="btn btn-default" href="{% url 'cart' %}">
+                <input id="submit-btn" type="submit" value="Add to cart" class="btn btn-default"
+                       href="{% url 'cart' %}">
             </form>
 
             <br/>

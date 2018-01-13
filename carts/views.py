@@ -1,4 +1,4 @@
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
@@ -29,12 +29,13 @@ class CartView(SingleObjectMixin, View):
 
     def get(self, request, *args, **kwargs):
         cart = self.get_object()
+
         item_id = request.GET.get('item', None)
         delete = request.GET.get('delete', False)
+        print delete
         if item_id:
             item = get_object_or_404(Variation, id=item_id)
             quantity = request.GET.get('quantity', 1)
-
             try:
                 if int(quantity) < 1:
                     delete = True
@@ -42,11 +43,23 @@ class CartView(SingleObjectMixin, View):
                 raise Http404
 
             cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
+            item_added = False
+            if created:
+                item_added = True
             if delete:
                 cart_item.delete()
             else:
                 cart_item.quantity = quantity
                 cart_item.save()
+
+        if request.is_ajax():
+            # Assuming if not deleted and not added that should reflect it is updated.
+            return JsonResponse(
+                {
+                    'item_deleted': delete,
+                    'item_added': item_added
+                }
+            )
 
         context = {
             'object': cart
