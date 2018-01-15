@@ -1,4 +1,5 @@
 from decimal import Decimal
+from utils import round_and_format_with_2decimal
 
 from django.conf import settings
 from django.db import models
@@ -38,7 +39,7 @@ class Cart(models.Model):
         for item in self.cartitem_set.all():
             subtotal += item.line_item_total
 
-        self.subtotal = subtotal
+        self.subtotal = round_and_format_with_2decimal(subtotal)
         self.save()
 
 
@@ -61,8 +62,8 @@ def cart_item_post_save_receiver(sender, instance, *args, **kwargs):
 
 @receiver(pre_save, sender=Cart)
 def tax_and_total_receiver(sender, instance, *args, **kwargs):
-    subtotal = instance.subtotal
-    tax_total = subtotal * Decimal(0.13)
+    subtotal = Decimal(instance.subtotal)
+    tax_total = subtotal * Decimal(0.085)
     total = subtotal + tax_total
-    instance.tax_total = round(tax_total, 2)
-    instance.total = round(total, 2)
+    instance.tax_total = round_and_format_with_2decimal(tax_total)
+    instance.total = round_and_format_with_2decimal(total)
