@@ -1,7 +1,8 @@
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import Http404, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.base import View
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import SingleObjectMixin, DetailView
 
 from carts.models import CartItem, Cart
 from products.models import Variation
@@ -103,3 +104,27 @@ class ItemCountView(View):
                 request.session['cart_item_count'] = cart_item_count
             return JsonResponse({'cart_item_count': cart_item_count})
         raise Http404
+
+
+class CheckoutView(DetailView):
+    model = Cart
+    template_name = 'carts/checkout.html'
+
+    def get_object(self, queryset=None):
+        cart_id = self.request.session.get('cart_id', None)
+        if not cart_id:
+            return redirect('cart')
+        cart = Cart.objects.get(id=cart_id)
+        return cart
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CheckoutView, self).get_context_data(*args, **kwargs)
+        user_auth = False
+        if not self.request.user.is_authenticated():
+            context['user_auth'] = user_auth
+            context['login_form'] = AuthenticationForm()
+            context['next_url'] = self.request.build_absolute_uri()
+        else:
+            user_auth = True
+        context['user_auth'] = user_auth
+        return context
