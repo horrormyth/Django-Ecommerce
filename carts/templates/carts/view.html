@@ -16,7 +16,9 @@
                 success: function (data) {
                     var flash_message = 'Item succesfully Updated';
                     if (data.item_deleted) {
-                        $('#subtotal').text('Subtotal : ' + data.subtotal);
+                        $('#subtotal').text(data.subtotal);
+                        $('#tax_total').text(data.tax_total);
+                        $('#cart_total').text(data.cart_total);
                         $('#item-' + item).fadeOut();
                         flash_message = 'Item successfully deleted !!'
                     }
@@ -25,7 +27,9 @@
                             flash_message = 'Item successfully added !!'
                         }
                         $('#item-line-total-' + item).text(data.line_item_total);
-                        $('#subtotal').text('Subtotal : ' + data.subtotal);
+                        $('#subtotal').text(data.subtotal);
+                        $('#tax_total').text(data.tax_total);
+                        $('#cart_total').text(data.cart_total);
                     }
                     if (data.total_items === 0) {
                         $(".table").fadeOut();
@@ -70,13 +74,14 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td id="subtotal" colspan="4" class="text-right">Subtotal: {{ object.subtotal }}</td>
+                    <td colspan="4" class="text-right">Subtotal: <span id="subtotal">{{ object.subtotal }}</span></td>
                 </tr>
                 <tr>
-                    <td id="tax_total" colspan="4" class="text-right">Tax (Estimated): {{ object.tax_total }}</td>
+                    <td colspan="4" class="text-right">Tax total(Estimated): <span
+                            id="tax_total">{{ object.tax_total }}</span></td>
                 </tr>
                 <tr>
-                    <td id="total" colspan="4" class="text-right">Total: {{ object.total }}</td>
+                    <td colspan="4" class="text-right">Total: <span id="cart_total">{{ object.total }}</span></td>
                 </tr>
 
             </table>

@@ -62,7 +62,7 @@ def cart_item_post_save_receiver(sender, instance, *args, **kwargs):
 @receiver(pre_save, sender=Cart)
 def tax_and_total_receiver(sender, instance, *args, **kwargs):
     subtotal = instance.subtotal
-    tax_total = Decimal(subtotal) * Decimal(0.085)
+    tax_total = subtotal * Decimal(0.13)
     total = subtotal + tax_total
     instance.tax_total = round(tax_total, 2)
-    instance.tax_total = round(total, 2)
+    instance.total = round(total, 2)
