@@ -27,6 +27,8 @@ class Cart(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     subtotal = models.DecimalField(max_digits=20, decimal_places=2, default=20)
+    tax_total = models.DecimalField(max_digits=20, decimal_places=2, default=20)
+    total = models.DecimalField(max_digits=20, decimal_places=2, default=20)
 
     def __unicode__(self):
         return str(self.id)
