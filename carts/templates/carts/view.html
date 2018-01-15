@@ -34,6 +34,7 @@
 
                     }
                     showFlashMessage(flash_message)
+                    updateCartItemCount()
                 },
                 error: function (response, error) {
                     $('#add-form').submit()
@@ -46,7 +47,7 @@
 {% block content %}
     <div class="row main-content">
         {% if object.cartitem_set.all.count < 1 %}
-           {% include 'carts/empty_cart.html' %}
+            {% include 'carts/empty_cart.html' %}
         {% else %}
             <table class="table">
                 {% for cart_item in object.cartitem_set.all %}

@@ -73,7 +73,7 @@ class CartView(SingleObjectMixin, View):
                 'item_added': item_added,
                 'line_item_total': line_item_total,
                 'subtotal': subtotal,
-                'total_items':total_items
+                'total_items': total_items
             }
             return JsonResponse(data=data)
 
@@ -82,3 +82,19 @@ class CartView(SingleObjectMixin, View):
         }
         template = self.template_name
         return render(request, template, context)
+
+
+class ItemCountView(View):
+    """The view to accomodate item count in the navbar """
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            cart_id = self.request.session.get('cart_id')
+            if not cart_id:
+                cart_item_count = 0
+            else:
+                cart = Cart.objects.get(id=cart_id)
+                cart_item_count = cart.items.count()
+                request.session['cart_item_count'] = cart_item_count
+            return JsonResponse({'cart_item_count': cart_item_count})
+        raise Http404

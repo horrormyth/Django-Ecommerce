@@ -35,6 +35,7 @@
                 data: formData,
                 success: function (data) {
                     showFlashMessage(checkItemStatus(data))
+                    updateCartItemCount()
                 },
                 error: function (response, error) {
                     $('#add-form').submit()

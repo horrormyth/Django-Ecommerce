@@ -26,7 +26,7 @@ class Cart(models.Model):
     items = models.ManyToManyField(Variation, through=CartItem)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
-    subtotal = models.DecimalField(max_digits=20, decimal_places=2)
+    subtotal = models.DecimalField(max_digits=20, decimal_places=2, default=20)
 
     def __unicode__(self):
         return str(self.id)
