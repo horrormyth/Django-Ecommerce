@@ -1,10 +1,3 @@
-
-#static is here mvpland_static
-#postgresql -- mvpland
-#username -- cfedeploy
-#password -- ##
-
-
 """
 Django settings for ecommerce project.
 
@@ -22,152 +15,141 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 from django.conf import settings
 
 if not settings.DEBUG:
-	import os
+    import os
 
-	BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-	#root of project
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # root of project
 
-	# Quick-start development settings - unsuitable for production
-	# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+    # Quick-start development settings - unsuitable for production
+    # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-	# SECURITY WARNING: keep the secret key used in production secret!
-	SECRET_KEY = 'csqwlmc8s55o($rt6ozh7u+ui9zb-et00w$d90j8$^!nvj41_r'
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = 'csqwlmc8s55o($rt6ozh7u+ui9zb-et00w$d90j8$^!nvj41_r'
 
-	# SECURITY WARNING: don't run with debug turned on in production!
-	DEBUG = False
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = False
 
-	ADMINS = (
-		("Dendra", "devndra.ghimire@gmail.com"),
+    ADMINS = (
+        ("Devndra", "devndra.ghimire@gmail.com"),
 
-		)
+    )
 
-	ALLOWED_HOSTS = []
-	#purchasing domain name http://name.com
+    ALLOWED_HOSTS = ['''Add the host here, comma separated''']
+    # purchasing domain name http://name.com
 
-	EMAIL_HOST = 'smtp.gmail.com'
-	EMAIL_HOST_USER = 'yourgmail@gmail.com'
-	EMAIL_HOST_PASSWORD = 'yourpassword'
-	EMAIL_PORT = 587
-	EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = 'horrormyth@gmail.com'
+    EMAIL_HOST_PASSWORD = 'yourpassword'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
 
-	''' 
-	If using gmail, you will need to
-	unlock Captcha to enable Django 
-	to  send for you:
-	https://accounts.google.com/displayunlockcaptcha
-	'''
+    ''' 
+    If using gmail, you will need to
+    unlock Captcha to enable Django 
+    to  send for you:
+    https://accounts.google.com/displayunlockcaptcha
+    '''
 
+    # Application definition
 
+    INSTALLED_APPS = (
+        # django app
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.sites',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        # third party apps
+        'crispy_forms',
+        'registration',
+        # my apps
+        'newsletter',
+    )
 
-	# Application definition
+    MIDDLEWARE_CLASSES = (
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'django.middleware.security.SecurityMiddleware',
+    )
 
-	INSTALLED_APPS = (
-	    #django app
-	    'django.contrib.admin',
-	    'django.contrib.auth',
-	    'django.contrib.contenttypes',
-	    'django.contrib.sessions',
-	    'django.contrib.sites',
-	    'django.contrib.messages',
-	    'django.contrib.staticfiles',
-	    #third party apps
-	    'crispy_forms',
-	    'registration',
-	    #my apps
-	    'newsletter',
-	)
+    ROOT_URLCONF = 'ecommerce.urls'
 
-	MIDDLEWARE_CLASSES = (
-	    'django.contrib.sessions.middleware.SessionMiddleware',
-	    'django.middleware.common.CommonMiddleware',
-	    'django.middleware.csrf.CsrfViewMiddleware',
-	    'django.contrib.auth.middleware.AuthenticationMiddleware',
-	    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-	    'django.contrib.messages.middleware.MessageMiddleware',
-	    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	    'django.middleware.security.SecurityMiddleware',
-	)
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.join(BASE_DIR, "templates")],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+            },
+        },
+    ]
 
-	ROOT_URLCONF = 'ecommerce.urls'
+    WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-	TEMPLATES = [
-	    {
-	        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-	        'DIRS': [os.path.join(BASE_DIR, "templates")],
-	        'APP_DIRS': True,
-	        'OPTIONS': {
-	            'context_processors': [
-	                'django.template.context_processors.debug',
-	                'django.template.context_processors.request',
-	                'django.contrib.auth.context_processors.auth',
-	                'django.contrib.messages.context_processors.messages',
-	            ],
-	        },
-	    },
-	]
+    # Database
+    # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-	WSGI_APPLICATION = 'ecommerce.wsgi.application'
+    from .db_password import DBPASS
 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': "dcommerce",
+            'USER': "dcommerce-app",
+            'PASSWORD': DBPASS,
+        }
+    }
 
-	# Database
-	# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+    # Internationalization
+    # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-	from .db_password import DBPASS
+    LANGUAGE_CODE = 'en-us'
 
-	DATABASES = {
-	    'default': {
-	        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-	        'NAME': "mvpland",
-	        'USER': "cfedeploy",
-	        'PASSWORD': DBPASS,
-	    }
-	}
+    TIME_ZONE = 'UTC'
 
+    USE_I18N = True
 
-	# Internationalization
-	# https://docs.djangoproject.com/en/1.8/topics/i18n/
+    USE_L10N = True
 
-	LANGUAGE_CODE = 'en-us'
+    USE_TZ = True
 
-	TIME_ZONE = 'UTC'
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-	USE_I18N = True
+    STATIC_URL = '/static/'
 
-	USE_L10N = True
+    """Change this and the MEDIA ROOT """
+    STATIC_ROOT = '/home/cfedeploy/webapps/mvpland_static/'
+    # os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "static_root")
 
-	USE_TZ = True
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, "static_in_pro", "our_static"),
+        # os.path.join(BASE_DIR, "static_in_env"),
+        # '/var/www/static/',
+    )
 
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = '/home/cfedeploy/webapps/mvpland_media/'
+    # os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "media_root")
 
-	# Static files (CSS, JavaScript, Images)
-	# https://docs.djangoproject.com/en/1.8/howto/static-files/
+    # Crispy FORM TAGs SETTINGS
+    CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-	STATIC_URL = '/static/'
-
-	STATIC_ROOT = '/home/cfedeploy/webapps/mvpland_static/'
-	#os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "static_root")
-	    
-	STATICFILES_DIRS = (
-	    os.path.join(BASE_DIR, "static_in_pro", "our_static"),
-	    #os.path.join(BASE_DIR, "static_in_env"),
-	    #'/var/www/static/',
-	)
-
-	MEDIA_URL = '/media/'
-	MEDIA_ROOT = '/home/cfedeploy/webapps/mvpland_media/'
-	#os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "media_root")
-
-
-	#Crispy FORM TAGs SETTINGS
-	CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
-
-	#DJANGO REGISTRATION REDUX SETTINGS
-	ACCOUNT_ACTIVATION_DAYS = 7
-	REGISTRATION_AUTO_LOGIN = True
-	SITE_ID = 1
-	LOGIN_REDIRECT_URL = '/'
-
-
-
-
-
+    # DJANGO REGISTRATION REDUX SETTINGS
+    ACCOUNT_ACTIVATION_DAYS = 7
+    REGISTRATION_AUTO_LOGIN = True
+    SITE_ID = 1
+    LOGIN_REDIRECT_URL = '/'
