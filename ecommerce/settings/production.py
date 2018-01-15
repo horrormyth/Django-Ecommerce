@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+"""GET ALL THE SENSITIVE INFORMATION FORM THE ENV VARIABLES USE env library """
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 from django.conf import settings
