@@ -37,11 +37,11 @@ if not settings.DEBUG:
 	DEBUG = False
 
 	ADMINS = (
-		("Justin", "codingforentrepreneurs@gmail.com"),
+		("Dendra", "devndra.ghimire@gmail.com"),
 
 		)
 
-	ALLOWED_HOSTS = ['cfedeploy.webfactional.com', 'trydjango.com', 'www.trydjango.com']
+	ALLOWED_HOSTS = []
 	#purchasing domain name http://name.com
 
 	EMAIL_HOST = 'smtp.gmail.com'
