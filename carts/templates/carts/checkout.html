@@ -3,6 +3,13 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <div class="col-sm-6">
+        <p class="lead">Continue as Guest</p>
+        <form method="POST" action="">{% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-success" value="Checkout">
+        </form>
+    </div>
     {% if not user_auth %}
         <div class="col-sm-6">
             <p class="lead">Continue as Guest</p>
