@@ -1,32 +1,31 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="col-sm-6">
-        <p class="lead">Continue as Guest</p>
-        <form method="POST" action="">{% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" class="btn btn-success" value="Checkout">
-        </form>
-    </div>
+
     {% if not user_auth %}
-        <div class="col-sm-6">
-            <p class="lead">Continue as Guest</p>
-        </div>
-        <div class="col-sm-6">
-            <p class="lead">Login to Continure</p>
-            <form method="POST" action="{% url 'auth_login' %}">
-                {% csrf_token %}
-                {{ login_form|crispy }}
-                <input type="hidden" name="next" value="{{ next_url }}">
-                <input type="submit" , class="btn btn-success" value="Login">
+        <div class='col-sm-6'>
+            <p class='lead'>Continue as Guest</p>
+            <form method='POST' action=''>{% csrf_token %}
+                {{ form|crispy }}
+                <input type='submit' class='btn btn-success' value='Continue as Guest'/>
             </form>
-            <p class="text-center">
-            <p>{% trans 'Forgot Password ' %}? <a href="{% url 'auth_password_reset' %}">{% trans 'Reset !!' %}</a></p>
-            <p>{% trans 'Not a memeber ' %}? <a href="{% url 'registration_register' %}">{% trans 'Register !!' %}</a>
+        </div>
+        <div class='col-sm-6'>
+            <p class='lead'>Login to Continue</p>
+            <form method='POST' action="{% url 'auth_login' %}"> {% csrf_token %}
+                {{ login_form|crispy }}
+                <input type='hidden' name='next' value='{{ next_url }}'/>
+                <input type='submit' class='btn btn-success' value='Login'/>
+            </form>
+            <p class='text-center'>
+            <p>{% trans "Forgot password " %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset !!" %}</a>!</p>
+            <p>{% trans "Not a member " %}? <a href="{% url 'registration_register' %}">{% trans "Register !!" %}</a>!
             </p>
             </p>
         </div>
     {% endif %}
+
+
 {% endblock %}

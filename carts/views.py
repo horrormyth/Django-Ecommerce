@@ -8,6 +8,7 @@ from django.views.generic.edit import FormMixin
 
 from carts.models import CartItem, Cart
 from orders.forms import GuestCheckoutForm
+from orders.models import UserCheckout
 from products.models import Variation
 
 
@@ -124,12 +125,15 @@ class CheckoutView(FormMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(CheckoutView, self).get_context_data(*args, **kwargs)
         user_auth = False
-        if not self.request.user.is_authenticated():
+        user_checkout_id = self.request.session.get('user_checkout_id', None)
+        if not self.request.user.is_authenticated() or not user_checkout_id:
             context['user_auth'] = user_auth
             context['login_form'] = AuthenticationForm()
             context['next_url'] = self.request.build_absolute_uri()
-        else:
+        elif self.request.user.is_authenticated() or user_checkout_id:
             user_auth = True
+        else:
+            pass
         context['user_auth'] = user_auth
         if 'form' not in context:
             # Lets not override the form errors (Not very good !!)
@@ -141,6 +145,9 @@ class CheckoutView(FormMixin, DetailView):
         form = self.get_form()
         if form.is_valid():
             # TODO Handle orders here
+            email = form.cleaned_data.get('email')
+            user_checkout, created = UserCheckout.objects.get_or_create(email=email)
+            request.session['user_checkout_id'] = user_checkout.id
             return self.form_valid(form=form)
         else:
             return self.form_invalid(form=form)
