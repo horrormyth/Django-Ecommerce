@@ -6,7 +6,7 @@ from django.db import models
 
 class UserCheckout(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
 
     def __unicode__(self):
         return self.email
