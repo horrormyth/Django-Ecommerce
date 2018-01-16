@@ -131,10 +131,13 @@ class CheckoutView(FormMixin, DetailView):
         else:
             user_auth = True
         context['user_auth'] = user_auth
-        context['form'] = self.get_form()
+        if 'form' not in context:
+            # Lets not override the form errors (Not very good !!)
+            context['form'] = self.get_form()
         return context
 
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
             # TODO Handle orders here
