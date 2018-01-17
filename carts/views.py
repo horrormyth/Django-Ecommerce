@@ -125,13 +125,20 @@ class CheckoutView(FormMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(CheckoutView, self).get_context_data(*args, **kwargs)
         user_auth = False
+        user = self.request.user
         user_checkout_id = self.request.session.get('user_checkout_id', None)
         if not self.request.user.is_authenticated() or not user_checkout_id:
             context['user_auth'] = user_auth
             context['login_form'] = AuthenticationForm()
             context['next_url'] = self.request.build_absolute_uri()
         elif self.request.user.is_authenticated() or user_checkout_id:
+            # user is saved here after user has been created through new register after checkout
+            # Not very good solution but , it would have been better if new user was created for annon user
+            user_checkout, created = UserCheckout.objects.get_or_create(email=user.email)
+            user_checkout.user = user
+            user_checkout.save()
             user_auth = True
+            self.request.session['user_checkout_id'] = user_checkout.id
         else:
             pass
         context['user_auth'] = user_auth
