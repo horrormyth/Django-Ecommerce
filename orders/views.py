@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.views.generic import FormView
 
 from .models import UserAddress
@@ -20,3 +21,6 @@ class AddressSelectFormView(FormView):
         )
 
         return form
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse('checkout')
