@@ -11,3 +11,22 @@ class UserCheckout(models.Model):
     def __unicode__(self):
         return self.email
 
+
+ADDRESS_TYPE = (
+    ('billilng', 'Billing'),
+    ('shipping', 'Shipping')
+)
+
+
+class UserAddress(models.Model):
+    user = models.ForeignKey(UserCheckout)
+    address_type = models.CharField(max_length=120, choices=ADDRESS_TYPE)
+    street = models.CharField(max_length=120)
+    city = models.CharField(max_length=120)
+    zipcode = models.CharField(max_length=123)
+
+    def __unicode__(self):
+        return self.street
+
+
+
