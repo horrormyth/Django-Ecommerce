@@ -13,7 +13,7 @@ class UserCheckout(models.Model):
 
 
 ADDRESS_TYPE = (
-    ('billilng', 'Billing'),
+    ('billing', 'Billing'),
     ('shipping', 'Shipping')
 )
 
@@ -26,7 +26,7 @@ class UserAddress(models.Model):
     zipcode = models.CharField(max_length=123)
 
     def __unicode__(self):
-        return self.street
+        return '{}, {}'.format(self.street, self.city)
 
 
 
