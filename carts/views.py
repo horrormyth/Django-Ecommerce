@@ -1,5 +1,4 @@
 from django.contrib.auth.forms import AuthenticationForm
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -157,6 +156,7 @@ class CheckoutView(FormMixin, DetailView):
         if 'form' not in context:
             # Lets not override the form errors (Not very good !!)
             context['form'] = self.get_form()
+        context['order'] = self.get_order()
         return context
 
     def post(self, request, *args, **kwargs):
