@@ -28,6 +28,7 @@ class UserAddress(models.Model):
     address_type = models.CharField(max_length=120, choices=ADDRESS_TYPE)
     street = models.CharField(max_length=120)
     city = models.CharField(max_length=120)
+    state = models.CharField(max_length=120)
     zipcode = models.CharField(max_length=123)
 
     def __unicode__(self):
