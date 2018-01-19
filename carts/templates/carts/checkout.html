@@ -30,9 +30,10 @@
             <table class="table" >
                 <tr>
                     <td class="text-center">
-                        Items:<br/>
+                    {{ order.cart.cartitem_set.count }} Item{{ order.cart.cartitem_set.count|pluralize }}
+                       <br/>
                         {% for cart_item in order.cart.cartitem_set.all %}
-                            <b>{{ cart_item.item.get_title }}</b>
+                            <b>{{ cart_item.item.get_title }}</b><br/>
                         {% endfor %}
                     </td>
 
