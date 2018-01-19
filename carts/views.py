@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -8,7 +9,7 @@ from django.views.generic.edit import FormMixin
 
 from carts.models import CartItem, Cart
 from orders.forms import GuestCheckoutForm
-from orders.models import UserCheckout
+from orders.models import UserCheckout, UserAddress, Order
 from products.models import Variation
 
 
@@ -161,3 +162,33 @@ class CheckoutView(FormMixin, DetailView):
 
     def get_success_url(self):
         return reverse('checkout')
+
+    def get(self, request, *args, **kwargs):
+        get_data = super(CheckoutView, self).get(request, *args, **kwargs)
+        cart = self.get_object()
+        user_checkout_id = request.session.get('user_checkout_id')
+        if user_checkout_id:
+            user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+            billing_address_id = request.session.get('billing_address_id')
+            shipping_address_id = request.session.get('shipping_address_id')
+
+            if not (billing_address_id and shipping_address_id):
+                pass
+                return redirect('order_address')
+            else:
+                billing_address = UserAddress.objects.get(id=billing_address_id)
+                shipping_address = UserAddress.objects.get(id=shipping_address_id)
+
+            try:
+                new_order_id = request.session['order_id']
+                new_order = Order.objects.get(id=new_order_id)
+            except (KeyError, ObjectDoesNotExist):
+                new_order = Order()
+                request.session['order_id'] = new_order.id
+
+        new_order.cart = cart
+        new_order.user = user_checkout
+        new_order.billing_address = billing_address
+        new_order.shipping_address = shipping_address
+        new_order.save()
+        return get_data
