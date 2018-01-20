@@ -27,6 +27,7 @@
         </div>
     {% else %}
         <div class="col-sm-4 col-sm-offset-4 text-center">
+        <p class="lead">Order Summary</p>
             <table class="table">
                 <tr>
                     <td class="text-center">
@@ -56,10 +57,15 @@
             </table>
         </div>
         <div class="col-sm-4 col-sm-offset-4 text-center">
+        <hr>
             <p><b>Bill To</b></p>
             <p>{{ order.billing_address.get_address }}</p>
             <p><b>Ship To</b></p>
+            <hr>
             <p>{{ order.shipping_address.get_address }}</p>
+            <hr>
+            <p><b>Complete your order</b></p>
+            <a href="" class="btn btn-warning">Pay</a>
         </div>
     {% endif %}
 

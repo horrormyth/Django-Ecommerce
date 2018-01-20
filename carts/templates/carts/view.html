@@ -53,6 +53,8 @@
         {% if object.cartitem_set.all.count < 1 %}
             {% include 'carts/empty_cart.html' %}
         {% else %}
+            <div class="col-sm-sm-8 col-sm-offset-2">
+            <h1>Your Cart</h1>
             <table class="table">
                 {% for cart_item in object.cartitem_set.all %}
                     <tr id="item-{{ cart_item.item.id }}">
@@ -83,8 +85,11 @@
                 <tr>
                     <td colspan="4" class="text-right">Total: <span id="cart_total">{{ object.total }}</span></td>
                 </tr>
-
+                <tr>
+                    <td colspan="4" class="text-right"><a class="btn btn-warning" href="{% url 'checkout' %}">Checkout</a></td>
+                </tr>
             </table>
+            </div>
         {% endif %}
     </div>
 {% endblock %}
