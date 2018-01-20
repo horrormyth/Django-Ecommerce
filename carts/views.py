@@ -151,6 +151,7 @@ class CheckoutView(FormMixin, DetailView):
             pass
         context['user_auth'] = user_auth
         context['order'] = self.get_order()
+        context['form'] = self.get_form()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -178,7 +179,6 @@ class CheckoutView(FormMixin, DetailView):
             shipping_address_id = request.session.get('shipping_address_id')
 
             if not (billing_address_id and shipping_address_id):
-                pass
                 return redirect('order_address')
             else:
                 billing_address = UserAddress.objects.get(id=billing_address_id)
