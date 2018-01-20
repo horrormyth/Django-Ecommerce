@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-
+<div class="col-sm-4 col-sm-offset-4 text-center">
+<p class="lead">Select your address for the order</p>
 <form method="POST" action="">
 {% csrf_token %}
 
     {{ form|crispy }}
 <input type="submit" value="Select">
 </form>
+</div>
 
 {% endblock %}
