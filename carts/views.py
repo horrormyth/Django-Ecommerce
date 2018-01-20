@@ -147,10 +147,12 @@ class CheckoutView(FormMixin, DetailView):
         elif not self.request.user.is_authenticated() and not user_checkout_id:
             context['login_form'] = AuthenticationForm
             context['next_url'] = self.request.build_absolute_uri()
+        elif user_checkout_id:
+            user_auth = True
         else:
             pass
-        context['user_auth'] = user_auth
         context['order'] = self.get_order()
+        context['user_auth'] = user_auth
         context['form'] = self.get_form()
         return context
 
@@ -158,7 +160,6 @@ class CheckoutView(FormMixin, DetailView):
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
-            # TODO Handle orders here
             email = form.cleaned_data.get('email')
             user_checkout, created = UserCheckout.objects.get_or_create(email=email)
             request.session['user_checkout_id'] = user_checkout.id
