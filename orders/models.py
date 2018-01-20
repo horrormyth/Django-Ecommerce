@@ -34,6 +34,9 @@ class UserAddress(models.Model):
     def __unicode__(self):
         return '{}, {}'.format(self.street, self.city)
 
+    def get_address(self):
+        return '{}, {}, {},{}'.format(self.street, self.city, self.state, self.zipcode)
+
 
 class Order(models.Model):
     cart = models.ForeignKey(Cart)
