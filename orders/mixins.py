@@ -1,5 +1,3 @@
-from django.shortcuts import redirect
-
 from carts.models import Cart
 from models import Order
 
@@ -19,7 +17,10 @@ class CartOrderMixin(object):
 
     def get_cart(self, *args, **kwargs):
         cart_id = self.request.session.get('cart_id', None)
-        if not cart_id:
-            return redirect('cart')
-        cart = Cart.objects.get(id=cart_id)
-        return cart
+        cart = Cart.objects.filter(id=cart_id)
+        if cart:
+            cart = cart.get()
+            if cart.items.count() <= 0:
+                cart = None
+            return cart
+        return None
