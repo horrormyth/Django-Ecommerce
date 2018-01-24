@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic import FormView, CreateView
 
+from mixins import CartOrderMixin
 from .forms import AddressForm, UserAddressForm
 from .models import UserAddress, UserCheckout
 
@@ -22,7 +23,7 @@ class UserAddressCreateView(CreateView):
         return super(UserAddressCreateView, self).form_valid(form, *args, **kwargs)
 
 
-class AddressSelectFormView(FormView):
+class AddressSelectFormView(CartOrderMixin, FormView):
     form_class = AddressForm
     template_name = 'orders/address_select.html'
 
@@ -60,8 +61,12 @@ class AddressSelectFormView(FormView):
     def form_valid(self, form, *args, **kwargs):
         billing_address = form.cleaned_data.get('billing_address')
         shipping_address = form.cleaned_data.get('shipping_address')
-        self.request.session['billing_address_id'] = billing_address.id
-        self.request.session['shipping_address_id'] = shipping_address.id
+        order = self.get_order()
+        order.billing_address = billing_address
+        order.shipping_address = shipping_address
+        order.save()
+        # self.request.session['billing_address_id'] = billing_address.id
+        # self.request.session['shipping_address_id'] = shipping_address.id
         return super(AddressSelectFormView, self).form_valid(form, *args, **kwargs)
 
     def get_success_url(self, *args, **kwargs):
