@@ -66,8 +66,11 @@
             <hr>
             <a href="{% url 'order_address' %}">Change Billing/Shipping Address </a>
             <hr>
-            <p><b>Complete your order</b></p>
-            <a href="" class="btn btn-warning">Pay</a>
+            <form method="post" action="{% url 'final_checkout' %}">
+                {% csrf_token %}
+                <input type="hidden" name="payment_token", value="ABC">
+                <button type="submit" class="btn btn-warning">Complete your order</button>
+            </form>
         </div>
     {% endif %}
 
