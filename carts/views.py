@@ -159,11 +159,15 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         get_data = super(CheckoutView, self).get(request, *args, **kwargs)
+        cart = self.get_object()
+        if not cart:
+            return redirect('cart')
         new_order = self.get_order()
         user_checkout_id = request.session.get('user_checkout_id')
         if user_checkout_id:
             user_checkout = UserCheckout.objects.get(id=user_checkout_id)
-            if not new_order.billing_address or not new_order.shipping_address:
+            if not (new_order.billing_address and new_order.shipping_address):
                 return redirect('order_address')
             new_order.user = user_checkout
+            new_order.save()
         return get_data
