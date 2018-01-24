@@ -60,9 +60,11 @@
         <hr>
             <p><b>Bill To</b></p>
             <p>{{ order.billing_address.get_address }}</p>
-            <p><b>Ship To</b></p>
             <hr>
+            <p><b>Ship To</b></p>
             <p>{{ order.shipping_address.get_address }}</p>
+            <hr>
+            <a href="{% url 'order_address' %}">Change Billing/Shipping Address </a>
             <hr>
             <p><b>Complete your order</b></p>
             <a href="" class="btn btn-warning">Pay</a>
