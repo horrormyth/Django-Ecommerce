@@ -171,3 +171,13 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
             new_order.user = user_checkout
             new_order.save()
         return get_data
+
+
+class FinalCheckoutView(View):
+
+    def post(self, request, *args, **kwargs):
+        return redirect('checkout')
+
+    def get(self, request, *args, **kwargs):
+        return redirect('checkout')
+

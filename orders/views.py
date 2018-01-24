@@ -65,8 +65,6 @@ class AddressSelectFormView(CartOrderMixin, FormView):
         order.billing_address = billing_address
         order.shipping_address = shipping_address
         order.save()
-        # self.request.session['billing_address_id'] = billing_address.id
-        # self.request.session['shipping_address_id'] = shipping_address.id
         return super(AddressSelectFormView, self).form_valid(form, *args, **kwargs)
 
     def get_success_url(self, *args, **kwargs):
