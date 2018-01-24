@@ -38,7 +38,14 @@ class UserAddress(models.Model):
         return '{}, {}, {},{}'.format(self.street, self.city, self.state, self.zipcode)
 
 
+ORDER_STATUS = (
+    ('created', 'Created'),
+    ('completed', 'Completed')
+)
+
+
 class Order(models.Model):
+    status = models.CharField(max_length=120, choices=ORDER_STATUS, default='created')
     cart = models.ForeignKey(Cart)
     user = models.ForeignKey(UserCheckout, null=True)
     billing_address = models.ForeignKey(UserAddress, related_name='billing_address', null=True)
