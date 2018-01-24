@@ -7,9 +7,9 @@ from django.views.generic.detail import SingleObjectMixin, DetailView
 from django.views.generic.edit import FormMixin
 
 from carts.models import CartItem, Cart
-from orders.mixins import CartOrderMixin
 from orders.forms import GuestCheckoutForm
-from orders.models import UserCheckout, UserAddress, Order
+from orders.mixins import CartOrderMixin
+from orders.models import UserCheckout
 from products.models import Variation
 
 
