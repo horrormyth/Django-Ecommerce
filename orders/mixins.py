@@ -8,7 +8,7 @@ from models import Order
 class LoginRequiredMixin(object):
     """This mixin is already impletmentd fro  django 1.9 """
     @method_decorator(login_required)
-    def dispatch(self,request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from django.views.generic import FormView, CreateView, ListView
+from django.views.generic import FormView, CreateView, ListView, DetailView
 
 from mixins import CartOrderMixin, LoginRequiredMixin
 from .forms import AddressForm, UserAddressForm
@@ -76,6 +76,10 @@ class OrderList(LoginRequiredMixin, ListView):
     queryset = Order.objects.all()
 
     def get_queryset(self):
-        user_checkout_id = self.request.session.user.id
+        user_checkout_id = self.request.user.id
         user_checkout = UserCheckout.objects.get(id=user_checkout_id)
         return super(OrderList, self).get_queryset().filter(user=user_checkout)
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
