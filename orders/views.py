@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
+from django.http import Http404
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import FormView, CreateView, ListView, DetailView
 
 from mixins import CartOrderMixin, LoginRequiredMixin
@@ -81,5 +82,20 @@ class OrderList(LoginRequiredMixin, ListView):
         return super(OrderList, self).get_queryset().filter(user=user_checkout)
 
 
-class OrderDetailView(LoginRequiredMixin, DetailView):
+class OrderDetailView(DetailView):
     model = Order
+
+    def dispatch(self, request, *args, **kwargs):
+        user_checkout_id = self.request.session.get('user_checkout_id', None)
+        obj = self.get_object()
+        # if the session user doesnot exist look from the request user otherwise raise
+        try:
+            user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+        except UserCheckout.DoesNotExist:
+            user_checkout = UserCheckout.objects.get(user=request.user)
+        except UserCheckout.DoesNotExist:
+            user_checkout = None
+        if obj.user == user_checkout and user_checkout is not None:
+            return super(OrderDetailView, self).dispatch(request, *args, **kwargs)
+
+        raise Http404
