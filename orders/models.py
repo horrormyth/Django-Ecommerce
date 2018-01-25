@@ -63,6 +63,9 @@ class Order(models.Model):
     def __unicode__(self):
         return '{}'.format(self.cart.id)
 
+    def mark_completed(self):
+        self.status = 'completed'
+        self.save()
 
 @receiver(pre_save, sender=Order)
 def order_pre_save(sender, instance, *args, **kwargs):

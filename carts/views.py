@@ -176,10 +176,13 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 class FinalCheckoutView(CartOrderMixin, View):
 
     def post(self, request, *args, **kwargs):
-        payment_token = request.GET.get('payment_token', None)
+        payment_token = request.POST.get('payment_token', None)
         order = self.get_order()
         if payment_token:
-            print order.cart.items.all()
+            order.mark_completed()
+            # remove order from the session
+            del request.session['cart_id']
+            del request.session['order_id']
         return redirect('checkout')
 
     def get(self, request, *args, **kwargs):
