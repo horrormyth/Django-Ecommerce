@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.urlresolvers import reverse
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.base import View
@@ -188,4 +189,3 @@ class FinalCheckoutView(CartOrderMixin, View):
 
     def get(self, request, *args, **kwargs):
         return redirect('checkout')
-
