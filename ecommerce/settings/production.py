@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-"""GET ALL THE SENSITIVE INFORMATION FORM THE ENV VARIABLES USE env library """
+""" THIS HAS TO BE FIXED  """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
@@ -105,7 +105,7 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-from .db_password import DBPASS
+# from .db_password import DBPASS
 
 DATABASES = {
     'default': {
@@ -156,3 +156,8 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_AUTO_LOGIN = True
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
+
+
+BRAINTREE_PUBLIC_KEY = env('DJANGO_BRAINTREE_PUBLIC_KEY', None)
+BRAINTREE_PRIVATE_KEY = env('DJANGO_BRAINTREE_PRIVATE_KEY', None)
+BRAINTREE_MERCHANT_ID = env('DJANGO_BRAINTREE_MERCHANT_ID', None)
