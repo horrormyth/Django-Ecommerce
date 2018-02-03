@@ -1,20 +1,55 @@
 from decimal import Decimal
 
+import braintree
+from braintree.exceptions.authentication_error import AuthenticationError
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 # Create your models here.
 from carts.models import Cart
 
+# TODO  Put the constants separately and log if not authenticated properly
+
+BRAINTREE_PUBLIC_KEY = getattr(settings, 'BRAINTREE_PUBLIC_KEY', None)
+BRAINTREE_PRIVATE_KEY = getattr(settings, 'BRAINTREE_PRIVATE_KEY', None)
+BRAINTREE_MERCHANT_ID = getattr(settings, 'BRAINTREE_MERCHANT_ID', None)
+
+try:
+    braintree.Configuration.configure(environment='sandbox',
+                                      merchant_id=BRAINTREE_MERCHANT_ID,
+                                      public_key=BRAINTREE_PUBLIC_KEY,
+                                      private_key=BRAINTREE_PRIVATE_KEY
+                                      )
+    braintree_authentciated = True
+except AuthenticationError as error:
+    braintree_authentciated = False
+
 
 class UserCheckout(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True)
     email = models.EmailField(unique=True)
+    braintree_id = models.CharField(max_length=120, null=True, blank=True)
 
     def __unicode__(self):
         return self.email
+
+
+@receiver(post_save, sender=UserCheckout)
+def update_braintree_id(sender, instance, *args, **kwargs):
+    if not instance.braintree_id:
+        if braintree_authentciated:
+            result = braintree.Customer.create({
+                "email": instance.email,
+            }
+            )
+            if result.is_success:
+                instance.braintree_id = result.customer.id
+                instance.save()
+
+
+# TODO add error handling.
 
 
 ADDRESS_TYPE = (
@@ -66,6 +101,7 @@ class Order(models.Model):
     def mark_completed(self):
         self.status = 'completed'
         self.save()
+
 
 @receiver(pre_save, sender=Order)
 def order_pre_save(sender, instance, *args, **kwargs):
