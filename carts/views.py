@@ -1,3 +1,4 @@
+import braintree
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse
@@ -180,14 +181,27 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 class FinalCheckoutView(CartOrderMixin, View):
 
     def post(self, request, *args, **kwargs):
-        payment_token = request.POST.get('payment_token', None)
         order = self.get_order()
-        if payment_token:
-            order.mark_completed()
-            messages.success(request, 'Thank you for your order')
-            # remove order from the session
-            del request.session['cart_id']
-            del request.session['order_id']
+        order_total = order.order_total
+        payment_nonce = request.POST.get('payment_method_nonce', None)
+        if payment_nonce:
+            result = braintree.Transaction.sale({
+                "amount": order_total,
+                "payment_method_nonce": payment_nonce,
+                # Todo add more fields such as billing/shipping address, names,etc
+                "options": {
+                    "submit_for_settlement": True
+                }
+            })
+
+            if result.is_success:
+                order.mark_completed(transaction_id=result.transaction.id)
+                messages.success(request, 'Thank you for the order')
+                del request.session['cart_id']
+                del request.session['order_id']
+            else:
+                messages.success(request, '{}'.format(result.message))
+                return redirect('checkout')
         return redirect('order_detail', pk=order.pk)
 
     def get(self, request, *args, **kwargs):
