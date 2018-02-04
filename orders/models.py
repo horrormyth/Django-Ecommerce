@@ -116,8 +116,10 @@ class Order(models.Model):
     def __unicode__(self):
         return '{}'.format(self.cart.id)
 
-    def mark_completed(self):
+    def mark_completed(self, transaction_id=None):
         self.status = 'paid'
+        if transaction_id and not self.transaction_id:
+            self.transaction_id = transaction_id
         self.save()
 
 
