@@ -91,7 +91,8 @@ class UserAddress(models.Model):
 
 ORDER_STATUS = (
     ('created', 'Created'),
-    ('completed', 'Completed')
+    ('paid', 'Paid'),
+    ('shipped', 'Shipped'),
 )
 
 
@@ -110,12 +111,13 @@ class Order(models.Model):
         max_digits=50,
         decimal_places=2,
         default=5.99)
+    transaction_id = models.CharField(max_length=25, null=True, blank=True)
 
     def __unicode__(self):
         return '{}'.format(self.cart.id)
 
     def mark_completed(self):
-        self.status = 'completed'
+        self.status = 'paid'
         self.save()
 
 
