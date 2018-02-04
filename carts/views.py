@@ -130,6 +130,7 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
             user_checkout, created = UserCheckout.objects.get_or_create(email=user.email)
             user_checkout.user = user
             user_checkout.save()
+            context['bt_client_token'] = user_checkout.get_braintree_client_token()
             user_auth = True
             self.request.session['user_checkout_id'] = user_checkout.id
         elif not self.request.user.is_authenticated() and not user_checkout_id:
@@ -137,6 +138,8 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
             context['next_url'] = self.request.build_absolute_uri()
         elif user_checkout_id:
             user_auth = True
+            user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+            context['bt_client_token'] = user_checkout.get_braintree_client_token()
         else:
             pass
         context['order'] = self.get_order()
