@@ -40,7 +40,6 @@ class CartView(SingleObjectMixin, View):
 
         item_id = request.GET.get('item', None)
         delete = request.GET.get('delete', False)
-        print delete
         if item_id:
             item = get_object_or_404(Variation, id=item_id)
             quantity = request.GET.get('quantity', 1)

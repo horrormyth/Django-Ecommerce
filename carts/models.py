@@ -1,5 +1,5 @@
 from decimal import Decimal
-from utils import round_and_format_with_2decimal
+from carts.utils import round_and_format_with_2decimal
 
 from django.conf import settings
 from django.db import models

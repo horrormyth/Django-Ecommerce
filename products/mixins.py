@@ -3,7 +3,6 @@ from django.http import Http404
 from django.utils.decorators import method_decorator
 
 
-# send to login required vie instead of django admin
 class StaffRequiredMixin(object):
     @classmethod
     def as_view(self, *args, **kwargs):

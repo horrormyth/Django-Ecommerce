@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import FormView, CreateView, ListView, DetailView
 
-from mixins import CartOrderMixin, LoginRequiredMixin
+from orders.mixins import CartOrderMixin, LoginRequiredMixin
 from .forms import AddressForm, UserAddressForm
 from .models import UserAddress, UserCheckout, Order
 
