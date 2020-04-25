@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
+import django_heroku
+
+django_heroku.settings(locals())
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -167,4 +170,4 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
 
-
+django_heroku.settings(locals())
